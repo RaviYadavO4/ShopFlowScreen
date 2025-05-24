@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -27,6 +30,13 @@ android {
             )
         }
     }
+
+    applicationVariants.all{
+        outputs.all {
+            val formattedDate = getDate()
+            (this as com.android.build.gradle.internal.api.BaseVariantOutputImpl).outputFileName = "shop_flow_${formattedDate}_$versionName.apk"
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -37,6 +47,18 @@ android {
     buildFeatures {
         compose = true
     }
+}
+
+fun Date.formatToCustomString(): String {
+    val dateFormat = SimpleDateFormat("ddMMMyyyy_HH-mm")
+    return dateFormat.format(this)
+
+
+}
+
+fun getDate(): String {
+    val date = Date()
+    return date.formatToCustomString()
 }
 
 dependencies {
